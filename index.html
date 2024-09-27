@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+         body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        #quiz-screen, #end-screen, #high-scores {
+            display: none;
+        }
+        #question {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #34495e;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        #timer {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #e74c3c;
+        }
+        #progress {
+            text-align: right;
+            margin-bottom: 1rem;
+            color: #7f8c8d;
+        }
+        #result {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+        .correct {
+            background-color: #2ecc71;
+        }
+        .incorrect {
+            background-color: #e74c3c;
+        }
+        input[type="text"] {
+            width: 70%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        #random-btn {
+            width: 25%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background-color: #e67e22;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        #random-btn:hover {
+            background-color: #d35400;
+        }
+        #navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        #navigation button {
+            width: 48%;
+        }
+        .selected {
+            border: 2px solid #00f867;
+            background-color: #e8ef0c;
+        }
+        
+    </style>
+</head>
+<body>
+    <body>
+        <div class="container">
+            <h1>Advanced JavaScript Quiz</h1>
+            
+            <div id="start-screen">
+                <input type="text" id="name-input" placeholder="Enter your name">
+                <button id="random-btn">Random Name</button>
+                <button id="start-btn" class="btn">Start Quiz</button>
+                <button id="view-high-scores-btn" class="btn">View High Scores</button>
+            </div>
+    
+            <div id="quiz-screen">
+                <div id="timer">Time: <span id="countDown">60</span></div>
+                <div id="progress">Question 1 of 5</div>
+                <div id="question"></div>
+                <div id="answers"></div>
+                <div id="result"></div>
+                <div id="navigation">
+                    <button id="prev-btn" class="btn" style="display: none;">Previous</button>
+                    <button id="save-next-btn" class="btn" onclick="alertMsg()">Save &amp; Next</button>
+                </div>
+            </div>
+    
+            <div id="end-screen">
+                <h2>Quiz Completed!</h2>
+                <p id="final-score"></p>
+                <button id="save-score-btn" class="btn">Save Score</button>
+                <button id="restart-btn" class="btn" onclick="restartQuiz()">Restart Quiz</button>
+            </div>
+    
+            <div id="high-scores"></div>
+        </div>
+        <script>
+            let arr = [
+                {
+                    "question":"Which keyword is used to declare a constant variable in JavaScript?",
+                    "answer": ["var", "let", "const", "fixed"]     
+                },
+                {
+                    "question":"What will be the output of: console.log(typeof []);",
+                    "answer":["array","object","undefined","null"]
+                },
+                {
+                    "question":"Which method is used to add an element to the end of an array?",
+                    "answer":["push","pop","unshift","shift"]
+                },
+                {
+                    "question": "What does the '===' operator do in JavaScript?",
+                    "answers": ["Assigns a value", "Compares values", "Compares values and types", "Logical AND"]
+                },
+                {
+                    "question": "Which function is used to parse a string to an integer in JavaScript?",
+                    "answers": ["Integer.parse()", "parseInteger()", "parseInt()", "Number.parseInteger()"]
+                }
+            ]
+            let start_screen=document.getElementById("start-screen");
+            let start_btn=document.getElementById("start-btn");
+            let quiz_screen=document.getElementById("quiz-screen");
+            let question=document.getElementById("question");
+            let save_next_btn=document.getElementById("save-next-btn");
+            let end_screen=document.getElementById("end-screen");
+            let answers=document.getElementById("answers");
+            start_btn.addEventListener("click",function questionSection(){
+                start_screen.style.display="none";
+                quiz_screen.style.display="block";
+                end_screen.style.display="none";
+
+            });
+            function alertMsg(){
+                alert("Please select an option");
+            }
+            function restartQuiz(){
+                start_screen.style.display="block";
+                end_screen.style.display="none";
+            }
+            start_btn.addEventListener("click",function (){
+                for(let obj of arr){
+                    console.log(obj)
+                    for(let key in obj){
+                        if(key=="question"){
+                            question.innerHTML=obj[key];
+                        }
+                        else if(key =="answer"){
+                            let div=document.createElement("div");
+                            answers.innerHTML=obj[key];        
+                        }
+                    }       
+                }
+            }) 
+            let countDownTime = 60;
+            const countDownElement = document.getElementById('countDown');
+            const interval = setInterval(function() {
+                countDownTime--;
+                countDownElement.textContent = countDownTime ;
+                if (countDownTime <= 0) {
+                    clearInterval(interval);
+                    // countDownElement.textContent = 'Time is up!';
+                    end_screen.style.display="block";
+                    quiz_screen.style.display="none";
+                }
+            }, 1000);
+
+        </script>
+    </body>
+</body>
+</html>
